@@ -8,6 +8,7 @@ import (
 func main() {
 	http.HandleFunc("/hello", helloHandler)
 	http.HandleFunc("/42", answerHandler)
+	http.HandleFunc("/newfeat", newFeatureHandler)
 
 	fmt.Println("Server starting on :8080...")
 	if err := http.ListenAndServe(":8080", nil); err != nil {

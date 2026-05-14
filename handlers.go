@@ -37,3 +37,13 @@ func answerHandler(w http.ResponseWriter, r *http.Request) {
 	resp := Response{Message: fmt.Sprintf("The answer is %d", answer)}
 	json.NewEncoder(w).Encode(resp)
 }
+
+func newFeatureHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	resp := Response{Message: fmt.Sprintf("My new feature should return 42, get [%d]", shared.GetAnswer())}
+	json.NewEncoder(w).Encode(resp)
+}
