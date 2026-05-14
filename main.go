@@ -1,6 +1,7 @@
 package main
 
 import (
+	"butler-demo/shared"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -23,8 +24,23 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+func answerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	answer := shared.GetAnswer()
+	resp := Response{Message: fmt.Sprintf("The answer is %d", answer)}
+	json.NewEncoder(w).Encode(resp)
+}
+
 func main() {
 	http.HandleFunc("/hello", helloHandler)
+	http.HandleFunc("/42", answerHandler)
 
 	fmt.Println("Server starting on :8080...")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
